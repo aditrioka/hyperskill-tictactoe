@@ -1,0 +1,12 @@
+type: edu
+custom_name: Fight!
+files:
+  - name: src/tictactoe/Main.kt
+    visible: true
+    learner_created: false
+  - name: test/TicTacToeTest.java
+    visible: false
+    learner_created: false
+feedback_link: https://hyperskill.org/projects/123/stages/658/implement#comment
+status: Unchecked
+record: -1
