@@ -1,21 +1,30 @@
 package tictactoe
 
-import kotlin.random.Random
-
-const val GRID_SIZE = 3
-const val CROSS = "X"
-const val CIRCLE = "O"
-
 fun main() {
-    repeat(GRID_SIZE) {
-        repeat(GRID_SIZE) {
-            val character = if (Random.nextBoolean()) CIRCLE else CROSS
-            print(character)
-            if (!isLastCell(it)) print(" ")
-
-        }
-        if(!isLastCell(it)) println()
-    }
+    val ticTacToe = TicTacToe()
+    ticTacToe.start()
 }
 
-fun isLastCell(col: Int): Boolean = col == GRID_SIZE
+class TicTacToe {
+    fun start() {
+        val state = readln()
+        var iterator = 0
+
+        println("---------")
+        for(row in 0..<GRID_SIZE) {
+            print("| ")
+            for(col in 0..<GRID_SIZE) {
+                print("${state[iterator]} ")
+                iterator++
+            }
+            println("|")
+        }
+        println("---------")
+    }
+
+    companion object {
+        const val GRID_SIZE = 3
+        const val CROSS = "X"
+        const val CIRCLE = "O"
+    }
+}
