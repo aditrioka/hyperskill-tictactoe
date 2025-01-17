@@ -1,19 +1,22 @@
 package tictactoe
 
+import kotlin.random.Random
+
 fun main() {
-    val state = readln()
-    val ticTacToe = TicTacToe(state)
+    val ticTacToe = TicTacToe()
     ticTacToe.start()
 }
 
-class TicTacToe(private val input: String) {
+class TicTacToe() {
 
     private var winner = ""
-    private val state = mutableListOf<MutableList<Char>>()
-    private var numOfCross = 0
-    private var numOfCircle = 0
-    private var numOfBlank = 0
+    private var numOfBlank = GRID_SIZE * GRID_SIZE
+    private var moveCount = 0
 
+    private val state = mutableListOf<MutableList<Char>>()
+
+    private val isGameOver
+        get() = isWinState() || isDrawState()
 
     init {
         initState()
@@ -22,20 +25,25 @@ class TicTacToe(private val input: String) {
     fun start() {
         printState()
         play()
-        printState()
-//        evaluate()
     }
 
     private fun play() {
+        while(!isGameOver) {
+            placeCharacter()
+            printState()
+            evaluate()
+        }
+    }
+
+    private fun placeCharacter() {
         var isInputValid = false
         do {
             val input = readln()
-
             try {
                 val (row, col) = input.split(" ").map { it.toInt().dec() }
                 isInputValid = move(row, col)
             } catch (e: NumberFormatException) {
-                println("You should enter numbers")
+                println("You should enter numbers!")
             }
         } while(!isInputValid)
     }
@@ -44,10 +52,13 @@ class TicTacToe(private val input: String) {
         return when {
             !isValidCoordinates(row, col) -> {
                 println("Coordinates should be from 1 to 3!")
+                Random.nextInt()
                 false
             }
             isBlank(row, col) -> {
-                state[row][col] = CROSS
+                val character = if (moveCount % NUM_OF_PLAYER == 0) CROSS else CIRCLE
+                state[row][col] = character
+                moveCount++
                 true
             } else -> {
                 println("This cell is occupied! Choose another one!")
@@ -65,29 +76,12 @@ class TicTacToe(private val input: String) {
     }
 
     private fun initState() {
-        var iterator = 0
-
         for(row in 0..<GRID_SIZE) {
             state.add(mutableListOf())
             for(col in 0..<GRID_SIZE) {
-                val character = input[iterator]
-                state[row].add(character)
-                count(character)
-                iterator++
+                state[row].add(BLANK)
             }
         }
-    }
-
-    private fun count(character: Char) {
-        when (character) {
-            CIRCLE -> numOfCircle++
-            CROSS -> numOfCross++
-            BLANK -> numOfBlank++
-        }
-    }
-
-    private fun isValidRatio(): Boolean {
-        return Math.abs(numOfCircle - numOfCross) < 2
     }
 
     private fun printState() {
@@ -104,15 +98,9 @@ class TicTacToe(private val input: String) {
 
     private fun evaluate() {
         when {
-            isImpossibleState() -> println("Impossible")
             isWinState() -> println("$winner wins")
             isDrawState() -> println("Draw")
-            else -> println("Game not finished")
         }
-    }
-
-    private fun isImpossibleState(): Boolean {
-        return !isValidRatio() || (isWins(CROSS) && isWins(CIRCLE))
     }
 
     private fun isWinState(): Boolean {
@@ -170,6 +158,8 @@ class TicTacToe(private val input: String) {
         const val GRID_SIZE = 3
         const val CROSS = 'X'
         const val CIRCLE = 'O'
-        const val BLANK = '_'
+        const val BLANK = ' '
+        const val NUM_OF_PLAYER = 2
+        const val MAX_DIFF = 1
     }
 }

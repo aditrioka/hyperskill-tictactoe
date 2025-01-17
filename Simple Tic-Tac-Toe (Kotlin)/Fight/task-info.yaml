@@ -8,5 +8,9 @@ files:
     visible: false
     learner_created: false
 feedback_link: https://hyperskill.org/projects/123/stages/658/implement#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Well done! You've finished the project. Select a new project on <a href="https://hyperskill.org/projects">Hyperskill</a>
+    to continue learning.
+  time: "Fri, 17 Jan 2025 05:41:11 UTC"
 record: -1
