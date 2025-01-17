@@ -15,10 +15,53 @@ class TicTacToe(private val input: String) {
     private var numOfBlank = 0
 
 
-    fun start() {
+    init {
         initState()
+    }
+
+    fun start() {
         printState()
-        evaluate()
+        play()
+        printState()
+//        evaluate()
+    }
+
+    private fun play() {
+        var isInputValid = false
+        do {
+            val input = readln()
+
+            try {
+                val (row, col) = input.split(" ").map { it.toInt().dec() }
+                isInputValid = move(row, col)
+            } catch (e: NumberFormatException) {
+                println("You should enter numbers")
+            }
+        } while(!isInputValid)
+    }
+
+    private fun move(row: Int, col: Int): Boolean {
+        return when {
+            !isValidCoordinates(row, col) -> {
+                println("Coordinates should be from 1 to 3!")
+                false
+            }
+            isBlank(row, col) -> {
+                state[row][col] = CROSS
+                true
+            } else -> {
+                println("This cell is occupied! Choose another one!")
+                false
+            }
+        }
+    }
+
+    private fun isBlank(row: Int, col: Int): Boolean {
+        return state[row][col] == BLANK
+    }
+
+    private fun isValidCoordinates(row: Int, col: Int): Boolean {
+        return row < GRID_SIZE && col < GRID_SIZE
     }
 
     private fun initState() {
